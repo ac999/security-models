@@ -1,0 +1,79 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\author{Andrei Cristian\\\url{mailto:andrei.cristian1@info.uaic.ro}}
+\title{Lab 1 - Exercise 6}
+\begin{document}
+\maketitle
+\section{Definition of bisimulation}
+A relation $Z \subseteq W \times W'$ is said to be \textit{bisimulation} between $M$ and $M'$ if the following conditions are satisfied:
+\begin{enumerate}
+\item For all $w \in W$ and $w' \in W'$ such that $(w, w') \in Z$ and each $p \in AP$, it holds $p \in L(w)$ if and only if $p \in L'(w')$;
+\item If $(w, w') \in Z$ and $(w, v) \in R$, then there exists $v' \in W'$ such that $(v, v') \in Z$ and $(w', v') \in R'$ (\textit{forth condition});
+\item If $(w, w') \in Z$ and $(w', v') \in R$, then there exists $v \in W$ such that $(v, v') \in Z$ and $(w, v) \in R$ (\textit{back condition}).
+\end{enumerate}
+
+Two worlds $w$ and $w'$ are called bisimilar, $w \leftrightsquigarrow_{M, M'} w'$, if there is  a bisimulation $Z$ between $M$ and $M'$ with $(w, w') \in Z$.
+
+\section{Proposition 1}
+Let $M = <W, R, L>$ and $M'=<W', R', L'>$ be two Kripke structures. Let $w \in W'$ such as $w \leftrightsquigarrow_{M, M'} w'$.Then $w$ and $w'$ are modally equivalent, i.e., for each formula Modal Logic $\varphi$,
+	\[
+	M, w \models \varphi \textrm{ iff. } M', w' \models \varphi
+	\]
+\section{Structural induction proof}
+
+Demonstration using structural induction:
+
+\begin{itemize}
+
+\item
+\begin{tabbing}
+$\varphi = p \in AP$, \= $M, w \models p$ iff. $p \in L(w)$\\
+\> $w\leftrightsquigarrow_{M, M'}w' \xrightarrow{1.} L(w) = L(w') \Rightarrow p \in L(w') \Rightarrow M', w' \models p$; \textbf{(a)}\\
+\> $M', w' \models p$ iff. $p \in L(w')$\\
+\> $w\leftrightsquigarrow_{M, M'}w' \xrightarrow{1.} L(w') = L(w) \Rightarrow p \in L(w) \Rightarrow M, w \models p$; \textbf{(b)}\\
+\> $(a),(b)\Rightarrow M, w \models p$ iff. $M, w' \models p$.\\
+$\Rightarrow M, w \models p$ iff. $M', w' \models p$.
+\end{tabbing}
+\item
+\begin{tabbing}
+$\varphi = \neg \varphi_1$, \= $M, w \models \neg \varphi_1$ iff. $M, w \not \models \varphi_1$; \textbf{(a)}\\
+\> $M, w \models \varphi_1$ iff. $M', w' \models \varphi_1$; \textbf{(b)} -- demonstrated previously\\
+\> $(a), (b) \Rightarrow M', w' \not \models \varphi_1 \Rightarrow M', w' \models \neg \varphi_1$.\\
+\> $M', w' \models \neg \varphi_1$ iff. $M', w' \not \models \varphi_1$; \textbf{(c)}\\
+\> $M', w' \models \varphi_1$ iff. $M, w \models \varphi_1$; \textbf{(d)} -- demonstrated previously\\
+\> $(c), (d) \Rightarrow M, w \not \models \varphi_1 \Rightarrow M, w \models \neg \varphi_1$.\\
+$\Rightarrow M, w \models \varphi$ iff. $M', w' \models \varphi$.
+\end{tabbing}
+\item
+\begin{tabbing}
+$\varphi = \lozenge \varphi_1$, \= $M, w \models \lozenge \varphi_1$ iff. $\exists t \in W, (w, t) \in R, M, t \models \varphi_1$; \textbf{(a)}\\
+\> $w\leftrightsquigarrow_{M, M'} w' \xrightarrow{2.}$ if exists $(w, t) \in R$, then $\exists t' \in W', (w', t') \in R'$\\
+\> and $t \leftrightsquigarrow_{M, M'} t'$; \textbf{(b)}\\
+\> $(a), (b) \xrightarrow{IH} \exists t',(w', t') \in R', M', t' \models \varphi_1 \Rightarrow M', w' \models \lozenge \varphi_1$;\\
+\> $M', w' \models \lozenge \varphi_1$ iff. $\exists t' \in W', (w', t') \in R', M', t' \models \varphi_1$; \textbf{(c)}\\
+\> $w \leftrightsquigarrow_{M, M'} w' \xrightarrow{3.}$ if exists $(w', t') \in R'$, then $\exists t \in W, (w, t) \in R$\\
+\> and $t \leftrightsquigarrow_{M, M'} t'$; \textbf{(d)}\\
+\> $(c), (d) \xrightarrow{IH} \exists t, (w, t) \in R, M, t \models \varphi_1 \Rightarrow M, w \models \lozenge \varphi_1$.\\
+$\Rightarrow M, w \models \varphi$ iff. $M', w' \models \varphi$.
+\end{tabbing}
+\item
+\begin{tabbing}
+$\varphi = \square \varphi_1$, \= $M, w \models \square \varphi_1$ iff. $\forall t \in W, (w, t) \in R, M, t \models \varphi_1$; \textbf{(a)}\\
+\> $w \leftrightsquigarrow_{M, M'} w' \xrightarrow{2.}$ if exists $(w, t) \in R$, then $\exists t' \in W', (w', t') \in R'$\\
+\> and $t \leftrightsquigarrow_{M, M'} t'$; \textbf{(b)}\\
+\> $(a), (b) \xrightarrow{IH} \forall t', (w', t') \in R', M', t' \models \varphi_1 \Rightarrow M', w' \models \square \varphi_1$;\\
+\> $M', w' \models \square \varphi_1$ iff. $\forall t' \in W', (w', t') \in R', M', t' \models \varphi_1$; \textbf{(c)}\\
+\> $w \leftrightsquigarrow_{M, M'} w' \xrightarrow{3.}$ if exists $(w', t') \in R'$, then $\exists t \in W, (w, t) \in R$\\
+\> and $t \leftrightsquigarrow_{M, M'} t'$; \textbf{(d)}\\
+\> $(c), (d) \xrightarrow{IH} \forall t, (w, t) \in R, M, t \models \varphi_1 \Rightarrow M, w \models \square \varphi_1$.\\
+$\Rightarrow M, w \models \varphi$ iff. $M', w' \models \varphi$.
+\end{tabbing}
+\end{itemize}
+
+In conclusion, $\forall \varphi \in$ \textit{BML}, $M, w \models \varphi$ iff. $M', w' \models \varphi$
+
+\end{document}
